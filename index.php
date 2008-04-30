@@ -15,8 +15,21 @@
  *       1 week
  */
 
+/**
+ * Setup:
+ *
+CREATE TABLE `content` (
+  `url` text NOT NULL,
+  `age` int(11) NOT NULL,
+  `content` longblob NOT NULL,
+  `hash` varchar(32) NOT NULL,
+  PRIMARY KEY  (`hash`),
+  KEY `age` (`age`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+ */
+
 // Get the parameters and decode them
-$url = urldecode($_GET['url']);
+$url = $_GET['url'];
 if(isset($_GET['age'])){
   $age = $_GET['age'];
 }else{
@@ -25,14 +38,16 @@ if(isset($_GET['age'])){
 
 // If you want to include this script in a project, comment out the following line, and 
 // use the function fencedine_get_content.
-echo fencedine_get_content($url, $age);
+echo trim( fencedine_get_content($url, $age) );
 
 function fencedine_get_content($url, $age){
   /**
    * The following lines should be changed according to your requirements
-   */
-  mysql_connect('localhost','fencedine','vbjGFt3D7NqGTeJA');
+   */  
+  ini_set('user_agent', 'Scatchpad Bot http://scratchpads.eu/bot');
+  $link = mysql_connect('localhost','fencedine','vbjGFt3D7NqGTeJA');
   mysql_select_db('fencedine');
+  mysql_query("SET NAMES 'utf8'");
   
   // Select the content from the database.
   $sql = "SELECT content FROM content WHERE hash='".md5($url)."' AND age > ".(time()-$age);
@@ -42,10 +57,9 @@ function fencedine_get_content($url, $age){
     return $row[0];
   }
   // If we get here, nothing matched the query, so we'll insert it.
-  $content = file_get_contents($url);
   $sql = "DELETE FROM content WHERE hash = '".md5($url)."'";
-  mysql_query($sql);  
-  $sql = "INSERT INTO content (url, age, content, hash) VALUES ('".addslashes($url)."',".time().",'".addslashes($content)."','".md5($url)."')";
   mysql_query($sql);
-  return $content;
+  $sql = "INSERT INTO content (url, age, content, hash) VALUES ('".addslashes($url)."',".time().",'".addslashes(file_get_contents($url))."','".md5($url)."')";
+  mysql_query($sql);
+  return fencedine_get_content($url,$age+1000);
 }
