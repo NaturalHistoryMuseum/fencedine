@@ -52,6 +52,10 @@ function fencedine_get_content($url, $age){
   // Select the content from the database.
   $sql = "SELECT content FROM content WHERE hash='".md5($url)."' AND age > ".(time()-$age);
   $results = mysql_query($sql);
+  if(!$results){
+    // We've got an error, panic!
+    trigger_error("Query failed: ".$sql);
+  }
   while($row = mysql_fetch_array($results)){
     // Assume there is only one row
     return $row[0];
