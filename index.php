@@ -42,5 +42,5 @@ if(file_exists($filename)){
   exec('wget "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null');
   // Just for logging purposes (the following can be uncommented), I'm saving
   // a list of URLs accessed
-  file_put_contents($fencedine_path, $_GET['url'], FILE_APPEND);
+  file_put_contents($fencedine_log, $_GET['url'], FILE_APPEND);
 }
