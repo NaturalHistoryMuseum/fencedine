@@ -26,16 +26,17 @@ $fencedine_age  = 86400;
 // Filename
 $filename = "$fencedine_dir/" . md5($_GET['url']);
 
-// If the file exists, redirect to it.
-if(file_exists($filename)){
-  // Do the redirect.
-  header("Location: $fencedine_path/".md5($_GET['url']));
+// Do the redirect.
+header("Location: $fencedine_path/".md5($_GET['url']));
   
-  // If the file is younger than x seconds, then exit, else continue to
-  // recreate the file
-  if(filectime($filename) > time()-$fencedine_age){
-    exit;
+// If the file exists, redirect to it.
+if(file_exists($filename)){  
+  // If the file is older than x seconds, then silently recreate the file
+  if(filectime($filename) < time()-$fencedine_age){
+    exec('nohup wget "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null & echo $!');
   }
+} else {
+  // The file doesn't exist, we need to download it and wait for it to be
+  // downloaded before redirecting.
+  exec('wget "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null');  
 }
-
-exec('nohup wget "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null & echo $!');
