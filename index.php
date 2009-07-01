@@ -3,6 +3,7 @@
 // ------------------------ SETTINGS -------------------------------------------
 $fencedine_dir  = '/var/www/fencedine.myspecies.info/files';
 $fencedine_path = '/files';
+$fencedine_log  = 'urls';
 $fencedine_age  = 86400;
 // -----------------------------------------------------------------------------
 
@@ -38,5 +39,8 @@ if(file_exists($filename)){
 } else {
   // The file doesn't exist, we need to download it and wait for it to be
   // downloaded before redirecting.
-  exec('wget "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null');  
+  exec('wget "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null');
+  // Just for logging purposes (the following can be uncommented), I'm saving
+  // a list of URLs accessed
+  file_put_contents($fencedine_path, $_GET['url'], FILE_APPEND);
 }
