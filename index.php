@@ -23,7 +23,7 @@ $fencedine_age  = 86400;
 $filename = "$fencedine_dir/" . md5($_GET['url']);
 
 // Do the redirect.
-header("Location: $fencedine_path/".md5($_GET['url']));
+header("Location: $filename");
   
 // If the file exists, redirect to it.
 if(file_exists($filename)){  
