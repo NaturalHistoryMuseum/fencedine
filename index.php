@@ -19,11 +19,14 @@ $fencedine_age  = 86400;
  * url - The URL of the content to download and return
  */
 
+// MD5 of URL
+$md5_url = md5($_GET['url']);
+
 // Filename
-$filename = "$fencedine_dir/" . md5($_GET['url']);
+$filename = "$fencedine_dir/" . $md5_url;
 
 // Do the redirect.
-header("Location: $filename");
+header("Location: $fencedine_path/$md5_url");
   
 // If the file exists, redirect to it.
 if(file_exists($filename)){  
