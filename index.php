@@ -23,7 +23,7 @@ $fencedine_age  = 86400;
 $md5_url = md5($_GET['url']);
 
 // Filename
-$filename = "$fencedine_dir/" . $md5_url;
+$filename = "$fencedine_dir/$md5_url";
 
 // Do the redirect.
 header("Location: $fencedine_path/$md5_url");
