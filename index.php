@@ -29,7 +29,7 @@ $filename = "$fencedine_dir/" . md5($_GET['url']);
 // If the file exists, redirect to it.
 if(file_exists($filename)){
   // Do the redirect.
-  header("Location: /$fencedine_path/".md5($_GET['url']));
+  header("Location: $fencedine_path/".md5($_GET['url']));
   
   // If the file is younger than x seconds, then exit, else continue to
   // recreate the file
@@ -38,4 +38,4 @@ if(file_exists($filename)){
   }
 }
 
-exec('nohup wget ' . $_GET['url'] . ' -O ' . $filename . ' > /dev/null & echo $!');
+exec('nohup wget "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null & echo $!');
