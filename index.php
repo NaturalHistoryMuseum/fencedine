@@ -12,16 +12,11 @@ $fencedine_age  = 86400;
  * webserver
  * 
  * The script should be used for content that is particularly slow to access, 
- * and that isn't expected to change much.  Content is cached in a MySQL 
- * database making it very quick to access anything that has already been 
- * accessed.
+ * and that isn't expected to change much.
  * 
  * The Script takes two parameters:
  * 
  * url - The URL of the content to download and return
- * 
- * age - The maximum age of the content in seconds to return.  The default for 
- *       this is 1 week
  */
 
 // Filename
