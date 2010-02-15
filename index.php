@@ -32,12 +32,12 @@ header("Location: $fencedine_path/$md5_url");
 if(file_exists($filename)){  
   // If the file is older than x seconds, then silently recreate the file
   if(filectime($filename) < time()-$fencedine_age){
-    exec('nohup wget "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null & echo $!');
+    exec('nohup wget --quiet "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null & echo $!');
   }
 } else {
   // The file doesn't exist, we need to download it and wait for it to be
   // downloaded before redirecting.
-  exec('wget "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null');
+  exec('wget --quiet "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null');
   // Just for logging purposes (the following can be uncommented), I'm saving
   // a list of URLs accessed
   file_put_contents($fencedine_log, $_GET['url']."\n", FILE_APPEND);
