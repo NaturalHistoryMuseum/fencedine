@@ -1,11 +1,13 @@
 <?php
 
 // ------------------------ SETTINGS -------------------------------------------
+
 $fencedine_dir  = '/var/www/fencedine.myspecies.info/files'; // Directory path
 $fencedine_path = '/files'; // URL path
 $fencedine_log  = 'urls'; // Log file
 $fencedine_age  = 86400; // Max age of cache
 $fencedine_min  = 10; // Minimum size of file to cache
+
 // -----------------------------------------------------------------------------
 
 /**
