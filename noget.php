@@ -30,7 +30,7 @@ $filename = "$fencedine_dir/$md5_url";
 header("Location: $fencedine_path/$md5_url");
   
 // If the file doesn't exist, or is too small, try and get it again.
-if(!file_exists($filename) || filesize($filename)<=$fencedine_min)){  
+if(!file_exists($filename) || filesize($filename)<=$fencedine_min){  
   // The file doesn't exist, we need to download it and wait for it to be
   // downloaded before redirecting.
   exec('wget --quiet "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null');
