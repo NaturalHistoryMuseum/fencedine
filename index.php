@@ -1,13 +1,17 @@
 <?php
-
 // ------------------------ SETTINGS -------------------------------------------
-$fencedine_dir  = '/var/www/fencedine.myspecies.info/files'; // Directory path
+$fencedine_dir = '/var/www/fencedine.myspecies.info/files'; // Directory path
 $fencedine_path = '/files'; // URL path
-$fencedine_log  = 'urls'; // Log file
-$fencedine_age  = 86400; // Max age of cache
-$fencedine_min  = 10; // Minimum size of file to cache
+$fencedine_log = 'urls'; // Log file
+$fencedine_age = 86400; // Max age of cache in seconds
+$fencedine_min = 10; // Minimum size of file to cache
+// ------------------------ CRON CONFIGURATION ---------------------------------
+// Run the following on Cron.  Note, 60 is the number of days that a file should
+// be kept for.  This can be increased or decreased as required.
+//
+// #!/bin/bash
+// find {$fencedine_dir} -mtime +60 -exec rm {} \;
 // -----------------------------------------------------------------------------
-
 /**
  * Fencedine is a script intended to be used as a proxy for content from a 
  * webserver
@@ -19,27 +23,23 @@ $fencedine_min  = 10; // Minimum size of file to cache
  * 
  * url - The URL of the content to download and return
  */
-
 // MD5 of URL
 $md5_url = md5($_GET['url']);
-
 // Filename
 $filename = "$fencedine_dir/$md5_url";
-
 // Do the redirect.
 header("Location: $fencedine_path/$md5_url");
-  
 // If the file exists and is bigger than min_bytes, redirect to it.
-if(file_exists($filename) && filesize($filename)>=$fencedine_min){  
+if(file_exists($filename) && filesize($filename) >= $fencedine_min){
   // If the file is older than x seconds, then silently recreate the file
-  if(filectime($filename) < time()-$fencedine_age){
+  if(filectime($filename) < time() - $fencedine_age){
     exec('nohup wget --quiet "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null & echo $!');
   }
-} else {
+}else{
   // The file doesn't exist, we need to download it and wait for it to be
   // downloaded before redirecting.
   exec('wget --quiet "' . $_GET['url'] . '" -O ' . $filename . ' > /dev/null');
   // Just for logging purposes (the following can be uncommented), I'm saving
   // a list of URLs accessed
-  file_put_contents($fencedine_log, $_GET['url']."\n", FILE_APPEND);
+  file_put_contents($fencedine_log, $_GET['url'] . "\n", FILE_APPEND);
 }
